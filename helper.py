@@ -8,3 +8,7 @@ def print_dash_seperator(n):
 
 def print_new_line():
     print("\n")
+
+
+def task_len(task):
+    return len(task) + 35

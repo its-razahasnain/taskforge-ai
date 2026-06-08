@@ -1,4 +1,5 @@
 from helper import (
+    print_equalto_seperator,
     print_new_line,
     print_dash_seperator,
     task_len,
@@ -11,6 +12,9 @@ task_list = []
 def add_task():
     while True:
         print_new_line()
+        print_dash_seperator(30)
+        print("Taskforge AI - Add Task:")
+        print_dash_seperator(30)
         task = input("What task would you like to schedule: ").strip().capitalize()
         if task:
             task_list.append(task)
@@ -25,6 +29,20 @@ def add_task():
         print("Task name cannot be empty!")
         print_dash_seperator(26)
         print_new_line()
+
+
+def view_task():
+    print_new_line()
+    print_dash_seperator(30)
+    print("Taskforge AI - View Task:")
+    print_equalto_seperator(30)
+    if task_list:
+        for i, task in enumerate(task_list, start=1):
+            print(f"{i}. {task}")
+    else:
+        print("No Task added yet.")
+    print_equalto_seperator(30)
+    print_new_line()
 
 
 def show_menu():
@@ -43,7 +61,7 @@ def show_menu():
             if user_option == 1:
                 add_task()
             elif user_option == 2:
-                continue
+                view_task()
             elif user_option == 3:
                 print_new_line()
                 print_dash_seperator(42)

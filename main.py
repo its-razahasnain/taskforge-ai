@@ -42,6 +42,7 @@ def delete_by_name(task_to_delete):
         print_message(f"{task_to_delete} removed successfully!")
     else:
         print_message(f"No Task here named {task_to_delete}!")
+        return
 
 
 def delete_by_index(task_to_delete):
@@ -51,9 +52,11 @@ def delete_by_index(task_to_delete):
             if task_index < 0:
                 print_message("Choose a number greater than 0!")
             else:
+                tasks.pop(task_index)
                 print_message(f"{tasks[task_index]} removed successfully!")
         else:
             print_message("Can't delete anything. Tasklist is empty!")
+            return
     except IndexError:
         print_message(f"Invalid task number. You can only choose upto {len(tasks)}")
 
@@ -70,6 +73,7 @@ def delete_task():
             delete_by_index(task_to_delete=task_to_delete)
     else:
         print_message("Please Enter a task name to delete.")
+        return
 
 
 def show_menu():

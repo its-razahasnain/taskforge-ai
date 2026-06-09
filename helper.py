@@ -11,4 +11,4 @@ def print_new_line():
 
 
 def task_len(task):
-    return len(task) + 35
+    return len(task) + 20

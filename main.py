@@ -36,6 +36,28 @@ def view_task():
     print_new_line()
 
 
+def delete_by_name(task_to_delete):
+    if task_to_delete in tasks:
+        tasks.remove(task_to_delete)
+        print_message(f"{task_to_delete} removed successfully!")
+    else:
+        print_message(f"No Task here named {task_to_delete}!")
+
+
+def delete_by_index(task_to_delete):
+    task_index = int(task_to_delete) - 1
+    try:
+        if tasks:
+            if task_index < 0:
+                print_message("Choose a number greater than 0!")
+            else:
+                print_message(f"{tasks[task_index]} removed successfully!")
+        else:
+            print_message("Can't delete anything. Tasklist is empty!")
+    except IndexError:
+        print_message(f"Invalid task number. You can only choose upto {len(tasks)}")
+
+
 def delete_task():
     print_message("Taskforge AI - Delete Task:")
     task_to_delete = (
@@ -43,25 +65,9 @@ def delete_task():
     )
     if task_to_delete:
         if not task_to_delete.isdigit():
-            if task_to_delete in tasks:
-                tasks.remove(task_to_delete)
-                print_message(f"{task_to_delete} removed successfully!")
-            else:
-                print_message(f"No Task here named {task_to_delete}!")
+            delete_by_name(task_to_delete=task_to_delete)
         else:
-            task_index = int(task_to_delete) - 1
-            try:
-                if tasks:
-                    if task_index < 0:
-                        print_message("Choose a number greater than 0!")
-                    else:
-                        print_message(f"{tasks[task_index]} removed successfully!")
-                else:
-                    print_message("Can't delete anything. Tasklist is empty!")
-            except IndexError:
-                print_message(
-                    f"Invalid task number. You can only choose upto {len(tasks)}"
-                )
+            delete_by_index(task_to_delete=task_to_delete)
     else:
         print_message("Please Enter a task name to delete.")
 

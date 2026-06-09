@@ -14,9 +14,10 @@ def task_len(task):
     return len(task) + 20
 
 
-def show_message(message):
+def print_message(message):
+    message_length = len(message)
     print_new_line()
-    print_dash_seperator(30)
+    print_dash_seperator(message_length)
     print(message)
-    print_dash_seperator(30)
+    print_dash_seperator(message_length)
     print_new_line()

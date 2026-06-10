@@ -12,12 +12,12 @@ tasks = []
 def add_task():
     while True:
         print_message("Taskforge AI - Add Task:")
-        task = (
+        task_name = (
             input("What task would you like to schedule: ").strip().lower().capitalize()
         )
-        if task:
-            tasks.append(task)
-            print_message(f"{task} successfully added")
+        if task_name:
+            tasks.append(task_name)
+            print_message(f"{task_name} successfully added")
             break
         print_message("Task name cannot be empty!")
 
@@ -47,16 +47,14 @@ def delete_by_name(task_to_delete):
 
 def delete_by_index(task_to_delete):
     task_index = int(task_to_delete) - 1
+    if not tasks:
+        print_message("Can't delete anything. Tasklist is empty!")
+        return
+    if task_index < 0:
+        print_message("Choose a number greater than 0!")
     try:
-        if tasks:
-            if task_index < 0:
-                print_message("Choose a number greater than 0!")
-            else:
-                tasks.pop(task_index)
-                print_message(f"{tasks[task_index]} removed successfully!")
-        else:
-            print_message("Can't delete anything. Tasklist is empty!")
-            return
+        deleted_task = tasks.pop(task_index)
+        print_message(f"{deleted_task} removed successfully!")
     except IndexError:
         print_message(f"Invalid task number. You can only choose upto {len(tasks)}")
 

@@ -1,3 +1,4 @@
+import json
 from helper import (
     print_equalto_seperator,
     print_new_line,
@@ -15,11 +16,13 @@ def add_task():
         task_name = (
             input("What task would you like to schedule: ").strip().lower().capitalize()
         )
-        if task_name:
-            tasks.append(task_name)
-            print_message(f"{task_name} successfully added")
-            break
-        print_message("Task name cannot be empty!")
+        if not task_name:
+            print_message("Task name cannot be empty!")
+            return
+        tasks.append(task_name)
+        save_to_json_file()
+        print_message(f"{task_name} successfully added")
+        break
 
 
 def view_task():
@@ -72,6 +75,12 @@ def delete_task():
     else:
         print_message("Please Enter a task name to delete.")
         return
+
+
+def save_to_json_file():
+    with open("tasks.json", "w") as f:
+        dumped_tasks = json.dumps(tasks)
+        f.write(dumped_tasks)
 
 
 def show_menu():

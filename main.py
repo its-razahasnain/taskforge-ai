@@ -1,4 +1,5 @@
 import json
+from pathlib import Path
 from helper import (
     print_equalto_seperator,
     print_new_line,
@@ -6,7 +7,7 @@ from helper import (
     print_message,
 )
 
-
+JSONFILE_PATH = Path("tasks.json")
 tasks = []
 
 
@@ -56,6 +57,7 @@ def delete_by_index(task_to_delete):
         return
     if task_index < 0:
         print_message("Choose a number greater than 0!")
+        return
     try:
         deleted_task = tasks.pop(task_index)
         save_to_json_file()
@@ -80,9 +82,21 @@ def delete_task():
 
 
 def save_to_json_file():
-    with open("tasks.json", "w") as f:
-        dumped_tasks = json.dumps(tasks)
-        f.write(dumped_tasks)
+    with open(JSONFILE_PATH, "w", encoding="utf-8") as f:
+        json.dump(tasks, f)
+
+
+def load_from_json_file():
+    if not JSONFILE_PATH.exists():
+        return []
+    with open(JSONFILE_PATH, "r", encoding="utf-8") as f:
+        try:
+            data = json.load(f)
+            if not data:
+                return []
+            return data
+        except json.JSONDecodeError:
+            return []
 
 
 def show_menu():
@@ -114,6 +128,7 @@ def show_menu():
 
 
 def main():
+    tasks.extend(load_from_json_file())
     show_menu()
 
 

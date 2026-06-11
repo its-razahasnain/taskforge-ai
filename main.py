@@ -42,6 +42,7 @@ def view_task():
 def delete_by_name(task_to_delete):
     if task_to_delete in tasks:
         tasks.remove(task_to_delete)
+        save_to_json_file()
         print_message(f"{task_to_delete} removed successfully!")
     else:
         print_message(f"No Task here named {task_to_delete}!")
@@ -57,6 +58,7 @@ def delete_by_index(task_to_delete):
         print_message("Choose a number greater than 0!")
     try:
         deleted_task = tasks.pop(task_index)
+        save_to_json_file()
         print_message(f"{deleted_task} removed successfully!")
     except IndexError:
         print_message(f"Invalid task number. You can only choose upto {len(tasks)}")

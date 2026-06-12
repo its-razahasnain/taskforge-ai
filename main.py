@@ -5,10 +5,25 @@ from helper import (
     print_new_line,
     print_dash_seperator,
     print_message,
+    get_status_emoji,
 )
 
 JSONFILE_PATH = Path("tasks.json")
 tasks = []
+
+
+def get_task_status():
+    while True:
+        user_input = (
+            input("Is your task completed (Answer in Yes or No): ").strip().lower()
+        )
+
+        if user_input == "yes":
+            return True
+        elif user_input == "no":
+            return False
+
+        print_message("Task Status is invalid! Please enter 'Yes' or 'No'.")
 
 
 def add_task():
@@ -18,9 +33,11 @@ def add_task():
             input("What task would you like to schedule: ").strip().lower().capitalize()
         )
         if not task_name:
-            print_message("Task name cannot be empty!")
+            print_message("Task name can't be empty!")
             return
-        tasks.append(task_name)
+        task_status = get_task_status()
+        task_to_save = {"title": task_name, "completed": task_status}
+        tasks.append(task_to_save)
         save_to_json_file()
         print_message(f"{task_name} successfully added")
         break
@@ -31,23 +48,32 @@ def view_task():
     print_dash_seperator(30)
     print("Taskforge AI - View Task:")
     print_equalto_seperator(30)
+    print_new_line()
+    print("ID\tStatus\tTask")
+    print_dash_seperator(30)
     if tasks:
         for i, task in enumerate(tasks, start=1):
-            print(f"{i}. {task}")
+            status = get_status_emoji(task)
+            print(f"{i}\t{status}\t{task['title']}")
     else:
         print("No Task added yet.")
+    print_new_line()
+    print_dash_seperator(30)
+    total_task = len(tasks)
+    print(f"Total Tasks: {total_task}")
     print_equalto_seperator(30)
     print_new_line()
 
 
 def delete_by_name(task_to_delete):
-    if task_to_delete in tasks:
-        tasks.remove(task_to_delete)
-        save_to_json_file()
-        print_message(f"{task_to_delete} removed successfully!")
-    else:
-        print_message(f"No Task here named {task_to_delete}!")
-        return
+    for task in tasks:
+        if task.get("title") == task_to_delete:
+            tasks.remove(task)
+            save_to_json_file()
+            print_message(f"{task_to_delete} removed successfully!")
+            return
+
+    print_message(f"No Task here named {task_to_delete}!")
 
 
 def delete_by_index(task_to_delete):
@@ -61,7 +87,7 @@ def delete_by_index(task_to_delete):
     try:
         deleted_task = tasks.pop(task_index)
         save_to_json_file()
-        print_message(f"{deleted_task} removed successfully!")
+        print_message(f"{deleted_task['title']} removed successfully!")
     except IndexError:
         print_message(f"Invalid task number. You can only choose upto {len(tasks)}")
 

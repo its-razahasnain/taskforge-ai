@@ -21,3 +21,10 @@ def print_message(message):
     print(message)
     print_dash_seperator(message_length)
     print_new_line()
+
+
+def get_status_emoji(task):
+    if task["completed"]:
+        return "✅"
+
+    return "❌"

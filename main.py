@@ -43,25 +43,40 @@ def add_task():
         break
 
 
+def task_statistics():
+    total_tasks = len(tasks)
+    completed_task = sum(task["completed"] for task in tasks)
+    pending_tasks = total_tasks - completed_task
+    if total_tasks == 0:
+        completion_percentage = 0
+    else:
+        completion_percentage = round((completed_task / total_tasks) * 100, 2)
+    return total_tasks, completed_task, pending_tasks, completion_percentage
+
+
 def view_task():
     print_new_line()
     print_dash_seperator(30)
     print("Taskforge AI - View Task:")
     print_equalto_seperator(30)
-    print_new_line()
     print("ID\tStatus\tTask")
     print_dash_seperator(30)
     if tasks:
         for i, task in enumerate(tasks, start=1):
             status = get_status_emoji(task)
             print(f"{i}\t{status}\t{task['title']}")
+        total_task, completed_tasks, pending_tasks, completion_percentage = (
+            task_statistics()
+        )
+        print_dash_seperator(30)
+        print(f"Total Tasks: {total_task}")
+        print(f"Completed Task: {completed_tasks}")
+        print(f"Pending Task: {pending_tasks}")
+        print(f"Percentage: {completion_percentage}%")
+        print_equalto_seperator(30)
     else:
         print("No Task added yet.")
-    print_new_line()
-    print_dash_seperator(30)
-    total_task = len(tasks)
-    print(f"Total Tasks: {total_task}")
-    print_equalto_seperator(30)
+        print_equalto_seperator(30)
     print_new_line()
 
 
@@ -107,9 +122,46 @@ def delete_task():
         return
 
 
+def mark_as_complete():
+    print_new_line()
+    print_dash_seperator(35)
+    print("Taskforge AI - Mark as Complete: ")
+    print_equalto_seperator(35)
+    print("ID\tStatus\tTasks")
+    print_dash_seperator(35)
+    for i, task in enumerate(tasks, start=1):
+        status = get_status_emoji(task)
+        print(f"{i}\t{status}\t{task['title']}")
+    if tasks:
+        print_dash_seperator(35)
+        print_new_line()
+        task_to_mark = (
+            int(input("Which Task from the following you want to marks as complete: "))
+            - 1
+        )
+        if task_to_mark >= 0 and task_to_mark <= len(tasks):
+            task_status = tasks[task_to_mark]
+            if not task_status["completed"]:
+                task_status["completed"] = True
+                save_to_json_file()
+                print_message("Task has been marked as completed!")
+            else:
+                print_message("The Task is already completed!")
+                return
+
+        else:
+            print_message(f"You can only select task from 1 to {len(tasks)}!")
+            return
+    else:
+        print("There are no tasks to show!")
+        print_dash_seperator(35)
+        print_new_line()
+        return
+
+
 def save_to_json_file():
     with open(JSONFILE_PATH, "w", encoding="utf-8") as f:
-        json.dump(tasks, f)
+        json.dump(tasks, f, indent=2, ensure_ascii=False)
 
 
 def load_from_json_file():
@@ -126,7 +178,13 @@ def load_from_json_file():
 
 
 def show_menu():
-    menu_options = ["Add Task", "View Task", "Delete Task", "Exit"]
+    menu_options = [
+        "Add Task",
+        "View Task",
+        "Mark Task Complete",
+        "Delete Task",
+        "Exit",
+    ]
     print_dash_seperator(38)
     print("Welcome to Taskforge AI - Task Manager")
     print_dash_seperator(38)
@@ -143,8 +201,10 @@ def show_menu():
             elif user_option == 2:
                 view_task()
             elif user_option == 3:
-                delete_task()
+                mark_as_complete()
             elif user_option == 4:
+                delete_task()
+            elif user_option == 5:
                 print_message("Thank you for using TaskForge AI. Goodbye!")
                 break
             else:

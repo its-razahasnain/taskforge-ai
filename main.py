@@ -48,6 +48,12 @@ class TaskForgeAI:
             completion_percentage = round((completed_task / total_tasks) * 100, 2)
         return total_tasks, completed_task, pending_tasks, completion_percentage
 
+    def display_task(self):
+        for task in self.tasks:
+            status = get_status_emoji(task)
+            task_id = task["unique_id"]
+            print(f"{task_id}\t{status}\t{task['title']}")
+
     def view_task(self):
         print_new_line()
         print_dash_seperator(30)
@@ -56,10 +62,7 @@ class TaskForgeAI:
         print("ID\tStatus\tTask")
         print_dash_seperator(30)
         if self.tasks:
-            for task in self.tasks:
-                status = get_status_emoji(task)
-                task_id = task["unique_id"]
-                print(f"{task_id}\t{status}\t{task['title']}")
+            self.display_task()
             total_task, completed_tasks, pending_tasks, completion_percentage = (
                 self.task_statistics()
             )
@@ -98,7 +101,7 @@ class TaskForgeAI:
                     print_message(f"{task['title']} removed successfully!")
                     self.tasks.remove(task)
                     return
-            
+
             self.save_to_json_file()
         except IndexError:
             print_message(
@@ -126,16 +129,18 @@ class TaskForgeAI:
         print_equalto_seperator(35)
         print("ID\tStatus\tTasks")
         print_dash_seperator(35)
-        for task in self.tasks:
-            status = get_status_emoji(task)
-            task_id = task["unique_id"]
-            print(f"{task_id}\t{status}\t{task['title']}")
+        self.display_task()
         if self.tasks:
             print_dash_seperator(35)
             print_new_line()
-            task_to_mark = int(
-                input("Which Task from the following you want to marks as complete: ")
-            )
+            try:
+                task_to_mark = int(
+                    input(
+                        "Which Task from the following you want to marks as complete: "
+                    )
+                )
+            except ValueError:
+                print_message("only numerical IDs are accepted!")
             ids = [task["unique_id"] for task in self.tasks]
             min_id = min(ids)
             max_id = max(ids)
@@ -173,7 +178,10 @@ class TaskForgeAI:
         with open(self.json_file_path, "r", encoding="utf-8") as f:
             try:
                 data = json.load(f)
-                return data
+                if isinstance(data, list):
+                    return data
+                else:
+                    return []
             except json.JSONDecodeError:
                 return []
 
@@ -214,6 +222,7 @@ class TaskForgeAI:
 
     def main(self):
         self.tasks.extend(self.load_from_json_file())
+        self.tasks.sort(key=lambda task: task["unique_id"])
         self.show_menu()
 
 

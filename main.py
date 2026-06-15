@@ -89,27 +89,28 @@ class TaskForgeAI:
 
     def delete_by_id(self, task_to_delete):
         task_id = int(task_to_delete)
-        if not self.tasks:
-            print_message("Can't delete anything. Tasklist is empty!")
-            return
         if task_id < 0:
             print_message("Choose a number greater than 0!")
             return
-        try:
-            for task in self.tasks:
-                if task["unique_id"] == task_id:
-                    print_message(f"{task['title']} removed successfully!")
-                    self.tasks.remove(task)
-                    return
+        found = False
 
-            self.save_to_json_file()
-        except IndexError:
-            print_message(
-                f"Invalid task number. You can only choose upto {len(self.tasks)}"
-            )
+        for task in self.tasks:
+            if task["unique_id"] == task_id:
+                self.tasks.remove(task)
+                self.save_to_json_file()
+                print_message(f"{task['title']} removed successfully!")
+                found = True
+                break
+
+        if not found:
+            print_message("No task found with this ID!")
 
     def delete_task(self):
         print_message("Taskforge AI - Delete Task:")
+        self.display_task()
+        if not self.tasks:
+            print_message("Can't delete anything. Tasklist is empty!")
+            return
         task_to_delete = (
             input("Which task you want me to delete: ").strip().lower().capitalize()
         )
@@ -141,27 +142,19 @@ class TaskForgeAI:
                 )
             except ValueError:
                 print_message("only numerical IDs are accepted!")
-            ids = [task["unique_id"] for task in self.tasks]
-            min_id = min(ids)
-            max_id = max(ids)
-            if task_to_mark >= min_id and task_to_mark <= max_id:
-                for task in self.tasks:
-                    if task["unique_id"] == task_to_mark:
-                        task_status = task["completed"]
+            for task in self.tasks:
+                if task["unique_id"] == task_to_mark:
+                    if task["completed"]:
+                        print_message("Task is already completed!")
+                        return
 
-                        if not task_status:
-                            task_status = True
-                            task.update({"completed": task_status})
-                            self.save_to_json_file()
-                            print_message("Task has been marked as completed!")
+                    task["completed"] = True
+                    self.save_to_json_file()
+                    print_message("Task marked as completed!")
+                    return
 
-                        else:
-                            print_message("The Task is already completed!")
-                            return
+            print_message("No task found with this ID!")
 
-            else:
-                print_message(f"You can only select task from ID {min_id} to {max_id}!")
-                return
         else:
             print("There are no tasks to show!")
             print_dash_seperator(35)

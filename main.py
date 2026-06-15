@@ -92,18 +92,15 @@ class TaskForgeAI:
         if task_id < 0:
             print_message("Choose a number greater than 0!")
             return
-        found = False
 
         for task in self.tasks:
             if task["unique_id"] == task_id:
                 self.tasks.remove(task)
                 self.save_to_json_file()
                 print_message(f"{task['title']} removed successfully!")
-                found = True
-                break
+                return
 
-        if not found:
-            print_message("No task found with this ID!")
+        print_message("No task found with this ID!")
 
     def delete_task(self):
         print_message("Taskforge AI - Delete Task:")
@@ -142,6 +139,7 @@ class TaskForgeAI:
                 )
             except ValueError:
                 print_message("only numerical IDs are accepted!")
+                return
             for task in self.tasks:
                 if task["unique_id"] == task_to_mark:
                     if task["completed"]:
@@ -214,7 +212,7 @@ class TaskForgeAI:
                 print_message("Invalid input! Please enter a numerical option here.")
 
     def main(self):
-        self.tasks.extend(self.load_from_json_file())
+        self.tasks = self.load_from_json_file()
         self.tasks.sort(key=lambda task: task["unique_id"])
         self.show_menu()
 

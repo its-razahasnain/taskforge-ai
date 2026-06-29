@@ -1,1 +1,17 @@
-[]
+[
+  {
+    "unique_id": 1,
+    "title": "Python coding",
+    "completed": true
+  },
+  {
+    "unique_id": 2,
+    "title": "Go to gym",
+    "completed": false
+  },
+  {
+    "unique_id": 3,
+    "title": "Study for 1 hour",
+    "completed": true
+  }
+]

@@ -114,37 +114,37 @@ python main.py
 
 ### 🏠 Main Menu
 
-![Main Menu](screenshots/menu.png)
+![Main Menu](Screenshots/menu.png)
 
 ---
 
 ### ➕ Adding a Task
 
-![Add Task](screenshots/add-task.png)
+![Add Task](Screenshots/add-task.png)
 
 ---
 
 ### 📋 Viewing Tasks
 
-![View Tasks](screenshots/view-task.png)
+![View Tasks](Screenshots/view-task.png)
 
 ---
 
 ### ✅ Marking a Task as Complete
 
-![Complete Task](screenshots/complete-task.png)
+![Complete Task](Screenshots/complete-task.png)
 
 ---
 
 ### 🗑️ Deleting a Task
 
-![Delete Task](screenshots/delete-task.png)
+![Delete Task](Screenshots/delete-task.png)
 
 ---
 
 ### 💾 JSON Data Storage
 
-![JSON File](screenshots/json-file.png)
+![JSON File](Screenshots/json-file.png)
 
 ---
 
